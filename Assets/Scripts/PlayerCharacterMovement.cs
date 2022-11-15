@@ -18,7 +18,7 @@ public class PlayerCharacterMovement : MonoBehaviour
     {
 
         Debug.Log("Hello World!");
-        
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
