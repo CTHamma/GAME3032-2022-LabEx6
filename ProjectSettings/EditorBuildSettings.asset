@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/TitleScreen.unity
+    guid: 0a1f3b62a31b73b4aa57385a867e14f8
+  - enabled: 1
+    path: Assets/Scenes/Overworld.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/BattleScene.unity
+    guid: e3a396aad2799c44a8a9a2cfc435f0d8
+  - enabled: 1
+    path: Assets/Scenes/DarkWorld.unity
+    guid: 8d6c59657e4abcf44a3a4b6bf92a3c34
+  m_configObjects: {}
