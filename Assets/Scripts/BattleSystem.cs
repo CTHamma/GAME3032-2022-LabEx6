@@ -12,6 +12,9 @@ public class BattleSystem : MonoBehaviour
     public Transform playerBattleArea;
     public Transform enemyBattleArea;
 
+    Fighter playerFighter;
+    Fighter enemyFighter;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +25,12 @@ public class BattleSystem : MonoBehaviour
 
     void SetupBattle()
     {
-        Instantiate(playerPrefab, playerBattleArea);
-        Instantiate(enemyPrefab, enemyBattleArea);
+        GameObject playerGO = Instantiate(playerPrefab, playerBattleArea);
+        playerFighter = playerGO.GetComponent<Fighter>();
+
+        GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleArea);
+        enemyFighter = enemyGO.GetComponent<Fighter>();
+
+        Debug.Log("Encountered a " + enemyFighter.fighterName + " enemy");
     }
 }

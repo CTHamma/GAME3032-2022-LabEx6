@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Fighter : MonoBehaviour
 {
-    [SerializeField] private string fighterName;
-    [SerializeField] private int damage;
-    [SerializeField] private int maxHP;
-    [SerializeField] private int currentHP;
+    public string fighterName;
+    public int damage;
+    public int maxHP;
+    public int currentHP;
 }
