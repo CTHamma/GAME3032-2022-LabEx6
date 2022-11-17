@@ -21,4 +21,13 @@ public class Fighter : MonoBehaviour
         else 
             return false; // Not dead yet
     }
+
+    public void Heal (int amount)
+    {
+        currentHP += amount;
+        if (currentHP > maxHP)
+        {
+            currentHP = maxHP;
+        }
+    }
 }

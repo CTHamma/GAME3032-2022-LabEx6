@@ -15,15 +15,20 @@ public class BattleSystem : MonoBehaviour
     Fighter playerFighter;
     Fighter enemyFighter;
 
+    public TMPro.TextMeshProUGUI dialogueText;
+
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
+
+    private SceneChange sceneChange;
 
     // Start is called before the first frame update
     void Start()
     {
+        sceneChange = FindObjectOfType<SceneChange>();
+
         state = BattleState.START;
         StartCoroutine(SetupBattle());
-
     }
 
     IEnumerator SetupBattle()
@@ -34,7 +39,7 @@ public class BattleSystem : MonoBehaviour
         GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleArea);
         enemyFighter = enemyGO.GetComponent<Fighter>();
 
-        Debug.Log("Encountered a " + enemyFighter.fighterName + " enemy");
+        dialogueText.text = "Encountered a " + enemyFighter.fighterName + " enemy";
 
         playerHUD.SetHUD(playerFighter);
         enemyHUD.SetHUD(enemyFighter);
@@ -51,7 +56,7 @@ public class BattleSystem : MonoBehaviour
         bool isDead = enemyFighter.TakeDamage(playerFighter.damage);
 
         enemyHUD.SetHP(enemyFighter.currentHP);
-        Debug.Log("Hero strikes at " + enemyFighter.fighterName);
+        dialogueText.text = "Hero strikes at " + enemyFighter.fighterName;
 
         yield return new WaitForEndOfFrame();
 
@@ -69,11 +74,42 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    IEnumerator PlayerHeal()
+    {
+        playerFighter.Heal(5);
+
+        playerHUD.SetHP(playerFighter.currentHP);
+        dialogueText.text = "You healed 5 HP";
+
+        yield return new WaitForEndOfFrame();
+
+        state = BattleState.ENEMYTURN;
+        StartCoroutine(EnemyTurn());
+    }
+
+    IEnumerator PlayerDidNothing()
+    {
+        dialogueText.text = "You wasted your turn";
+
+        yield return new WaitForEndOfFrame();
+
+        state = BattleState.ENEMYTURN;
+        StartCoroutine(EnemyTurn());
+    }
+
+    IEnumerator PlayerRunAway()
+    {
+        dialogueText.text = "Run for your life!";
+
+        yield return new WaitForSeconds(2f);
+        sceneChange.SwitchScene();
+    }
+
     IEnumerator EnemyTurn()
     {
         yield return new WaitForSeconds(2f);
 
-        Debug.Log(enemyFighter.fighterName + " attacks!");
+        dialogueText.text = enemyFighter.fighterName + " attacks!";
 
         yield return new WaitForSeconds(1f);
 
@@ -99,17 +135,17 @@ public class BattleSystem : MonoBehaviour
     {
         if(state == BattleState.WON)
         {
-            Debug.Log("BATTLE WON!");
+            dialogueText.text = "BATTLE WON!";
         }
         else if (state == BattleState.LOST)
         {
-            Debug.Log("YOU WERE DEFEATED");
+            dialogueText.text = "YOU WERE DEFEATED";
         }
     }
 
     void PlayerTurn()
     {
-        Debug.Log("Choose and action");
+        dialogueText.text = "Choose an action";
     }
 
     public void OnAttackButton()
@@ -121,5 +157,36 @@ public class BattleSystem : MonoBehaviour
 
         StartCoroutine(PlayerAttack());
 
+    }
+
+    public void OnHealButton()
+    {
+        if (state != BattleState.PLAYERTURN)
+        {
+            return;
+        }
+
+        StartCoroutine(PlayerHeal());
+
+    }
+
+    public void OnDoNothing()
+    {
+        if (state != BattleState.PLAYERTURN)
+        {
+            return;
+        }
+
+        StartCoroutine(PlayerDidNothing());
+    }
+
+    public void OnEscape()
+    {
+        if (state != BattleState.PLAYERTURN)
+        {
+            return;
+        }
+
+        StartCoroutine(PlayerRunAway());
     }
 }
